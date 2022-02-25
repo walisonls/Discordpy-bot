@@ -2,7 +2,6 @@ import discord
 import os
 from discord.ext import commands, tasks
 from datetime import datetime
-##import asyncio //deletar após tempo
 
 ## variables ##
 intents = discord.Intents.default()
@@ -15,6 +14,17 @@ point = 0
 async def on_ready():
   print(f"Estou pronto! Estou conectado como {bot.user}")
   current_time.start()
+
+## time response ##
+@tasks.loop(hours=24)
+async def current_time():
+  now = datetime.now()
+
+  now = now.strftime("%d/%m/%Y às %H:%M:%S")
+
+  channel = bot.get_channel(943122811747184720)
+
+  await channel.send("Ping Retornado, data: " + now)
 
 ## message control ##
 @bot.event
@@ -45,9 +55,6 @@ async def on_member_join(member):
   regras = bot.get_channel(942844806084845659)
   
   message = await canalboasvindas.send(f"Bem vindo(a) {member.mention}! Leia as regras em ")
-
-  ##await asyncio.sleep(20) //deletar após tempo
-  ##await message.delete() //deletar após tempo
   
 
 ## cargos por reação ##
@@ -82,17 +89,6 @@ async def get_random_image(ctx):
   embed_image.set_image(url=url_image)
 
   await ctx.send(embed=embed_image)
-    
-## time response ##
-@tasks.loop(hours=1)
-async def current_time():
-  now = datetime.now()
-
-  now = now.strftime("%d/%m/%Y às %H:%M:%S")
-
-  channel = bot.get_channel(943122811747184720)
-
-  await channel.send("Ping Retornado, Data Atual " + now)
 
 
 ## recuperando TOKEN ##
